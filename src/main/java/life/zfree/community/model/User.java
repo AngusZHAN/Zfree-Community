@@ -40,9 +40,7 @@ public class User {
         this.token = token;
     }
 
-    public Long getGmtCreate() {
-        return gmtCreate;
-    }
+    public Long getGmtCreate() { return gmtCreate; }
 
     public void setGmtCreate(Long gmtCreate) {
         this.gmtCreate = gmtCreate;
