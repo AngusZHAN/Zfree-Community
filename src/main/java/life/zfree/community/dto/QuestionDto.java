@@ -1,9 +1,10 @@
-package life.zfree.community.model;
+package life.zfree.community.dto;
 
+import life.zfree.community.model.User;
 import lombok.Data;
 
 @Data
-public class Question {
+public class QuestionDto {
     private Integer id;
     private String title;
     private String description;
@@ -14,4 +15,5 @@ public class Question {
     private Integer commentCount;
     private Integer viewCount;
     private Integer likeCount;
+    private User user;
 }
