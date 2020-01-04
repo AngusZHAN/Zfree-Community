@@ -1,6 +1,7 @@
 package life.zfree.community.service;
 
-import life.zfree.community.dto.QuestionDto;
+import life.zfree.community.dto.PaginationDTO;
+import life.zfree.community.dto.QuestionDTO;
 import life.zfree.community.mapper.QuestionMapper;
 import life.zfree.community.mapper.UserMapper;
 import life.zfree.community.model.Question;
@@ -21,16 +22,31 @@ public class QuestionService {
     @Autowired
     private QuestionMapper questionMapper;
 
-    public List<QuestionDto> list() {
-        List<Question> questions = questionMapper.list();
-        List<QuestionDto> questionDtoList = new ArrayList<>();
+    public PaginationDTO list(Integer page, Integer size) {
+        PaginationDTO paginationDTO = new PaginationDTO();
+        Integer totalCount = questionMapper.count();
+        paginationDTO.setPagination(totalCount, page, size);
+
+        if (page < 1) {
+            page = 1;
+        }
+        if (page > paginationDTO.getTotalPage()) {
+            page = paginationDTO.getTotalPage();
+        }
+
+        //size*(page-1)
+        Integer offset = size * (page - 1);
+        List<Question> questions = questionMapper.list(offset, size);
+        List<QuestionDTO> questionDTOList = new ArrayList<>();
+
         for (Question question : questions) {
             User user = userMapper.findById(question.getCreator());
-            QuestionDto questionDto = new QuestionDto();
-            BeanUtils.copyProperties(question, questionDto);
-            questionDto.setUser(user);
-            questionDtoList.add(questionDto);
+            QuestionDTO questionDTO = new QuestionDTO();
+            BeanUtils.copyProperties(question, questionDTO);
+            questionDTO.setUser(user);
+            questionDTOList.add(questionDTO);
         }
-        return questionDtoList;
+        paginationDTO.setQuestions(questionDTOList);
+        return paginationDTO;
     }
 }

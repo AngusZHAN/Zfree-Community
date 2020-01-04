@@ -1,15 +1,15 @@
 package life.zfree.community.controller;
 
-import life.zfree.community.dto.QuestionDto;
-import life.zfree.community.mapper.QuestionMapper;
+import life.zfree.community.dto.PaginationDTO;
+import life.zfree.community.dto.QuestionDTO;
 import life.zfree.community.mapper.UserMapper;
-import life.zfree.community.model.Question;
 import life.zfree.community.model.User;
 import life.zfree.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -25,9 +25,11 @@ public class IndexController {
 
     @GetMapping("/")
     public String index(HttpServletRequest request,
-                        Model model) {
+                        Model model,
+                        @RequestParam(name = "page", defaultValue = "1") Integer page,
+                        @RequestParam(name = "size", defaultValue = "5") Integer size) {
         Cookie[] cookies = request.getCookies();
-        if(cookies != null && cookies.length !=0) {
+        if (cookies != null && cookies.length != 0) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("token")) {
                     String token = cookie.getValue();
@@ -39,8 +41,8 @@ public class IndexController {
                 }
             }
         }
-        List<QuestionDto> questionList = questionService.list();
-        model.addAttribute("questions", questionList);
+        PaginationDTO pagination = questionService.list(page,size);
+        model.addAttribute("pagination", pagination);
         return "index";
     }
 }
