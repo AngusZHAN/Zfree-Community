@@ -1,8 +1,8 @@
 package life.zfree.community.controller;
 
-import life.zfree.community.mapper.QuestionMapper;
 import life.zfree.community.model.Question;
 import life.zfree.community.model.User;
+import life.zfree.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 public class PublishController {
 
     @Autowired
-    private QuestionMapper questionMapper;
+    private QuestionService questionService;
 
     @GetMapping("/publish")
     public String publish() {
@@ -61,7 +61,7 @@ public class PublishController {
         question.setGmtCreate(System.currentTimeMillis());
         question.setGmtModified(question.getGmtCreate());
         //questionMapper.create(question);
-        questionMapper.insert(question);
+        questionService.createOrUpdate(question);
         return "redirect:/";
     }
 }
