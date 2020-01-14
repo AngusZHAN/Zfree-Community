@@ -28,3 +28,6 @@ CREATE TABLE USER
     GMT_MODIFIED BIGINT
 );
 ```
+```bash
+mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
+```
