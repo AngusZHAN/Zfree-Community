@@ -2,6 +2,8 @@ package life.zfree.community.service;
 
 import life.zfree.community.dto.PaginationDTO;
 import life.zfree.community.dto.QuestionDTO;
+import life.zfree.community.exception.CustomizeErrorCode;
+import life.zfree.community.exception.CustomizeException;
 import life.zfree.community.mapper.QuestionMapper;
 import life.zfree.community.mapper.UserMapper;
 import life.zfree.community.model.Question;
@@ -106,6 +108,9 @@ public class QuestionService {
 
     public QuestionDTO getById(Integer id) {
         Question question = questionMapper.selectByPrimaryKey(id);
+        if (question == null) {
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        }
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question, questionDTO);
         User user = userMapper.selectByPrimaryKey(question.getCreator());
@@ -113,8 +118,8 @@ public class QuestionService {
         return questionDTO;
     }
 
-    public void createOrUpdate(Question question){
-        if (question.getId() == null){
+    public void createOrUpdate(Question question) {
+        if (question.getId() == null) {
             //创建
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
@@ -129,7 +134,10 @@ public class QuestionService {
             QuestionExample example = new QuestionExample();
             example.createCriteria()
                     .andIdEqualTo(question.getId());
-            questionMapper.updateByExampleSelective(updateQuestion, example);
+            int updated = questionMapper.updateByExampleSelective(updateQuestion, example);
+            if (updated != 1) {
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            }
         }
     }
 }
