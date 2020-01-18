@@ -4,6 +4,7 @@ import life.zfree.community.dto.PaginationDTO;
 import life.zfree.community.dto.QuestionDTO;
 import life.zfree.community.exception.CustomizeErrorCode;
 import life.zfree.community.exception.CustomizeException;
+import life.zfree.community.mapper.QuestionExtMapper;
 import life.zfree.community.mapper.QuestionMapper;
 import life.zfree.community.mapper.UserMapper;
 import life.zfree.community.model.Question;
@@ -19,12 +20,14 @@ import java.util.List;
 
 @Service
 public class QuestionService {
+    @Autowired
+    private QuestionMapper questionMapper;
+
+    @Autowired
+    private QuestionExtMapper questionExtMapper;
 
     @Autowired
     private UserMapper userMapper;
-
-    @Autowired
-    private QuestionMapper questionMapper;
 
     public PaginationDTO list(Integer page, Integer size) {
         PaginationDTO paginationDTO = new PaginationDTO();
@@ -139,5 +142,12 @@ public class QuestionService {
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
             }
         }
+    }
+
+    public void incView(Integer id) {
+        Question question = new Question();
+        question.setId(id);
+        question.setViewCount(1);
+        questionExtMapper.incView(question);
     }
 }
