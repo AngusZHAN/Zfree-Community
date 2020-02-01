@@ -1,8 +1,8 @@
 package life.zfree.community.controller;
 
-import life.zfree.community.dto.CommentCreateDTO;
 import life.zfree.community.dto.CommentDTO;
 import life.zfree.community.dto.QuestionDTO;
+import life.zfree.community.enums.CommentTypeEnum;
 import life.zfree.community.service.CommentService;
 import life.zfree.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class QuestionController {
     public String question(@PathVariable(name = "id") Long id,
                            Model model) {
         QuestionDTO questionDTO = questionService.getById(id);
-        List<CommentDTO> comments = commentService.listByQuestionId(id);
+        List<CommentDTO> comments = commentService.listByTargetId(id, CommentTypeEnum.QUESTION);
         //累加阅读数
         questionService.incView(id);
         model.addAttribute("question", questionDTO);

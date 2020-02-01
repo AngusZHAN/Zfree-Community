@@ -1,7 +1,9 @@
 package life.zfree.community.controller;
 
 import life.zfree.community.dto.CommentCreateDTO;
+import life.zfree.community.dto.CommentDTO;
 import life.zfree.community.dto.ResultDTO;
+import life.zfree.community.enums.CommentTypeEnum;
 import life.zfree.community.exception.CustomizeErrorCode;
 import life.zfree.community.model.Comment;
 import life.zfree.community.model.User;
@@ -9,12 +11,10 @@ import life.zfree.community.service.CommentService;
 import org.h2.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 public class CommentController {
@@ -45,5 +45,12 @@ public class CommentController {
         comment.setLikeCount(0L);
         commentService.insert(comment);
         return ResultDTO.okOf();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/comments/{id}", method = RequestMethod.GET)
+    public ResultDTO comments(@PathVariable(name="id") Long id) {
+        List<CommentDTO> commentDTOS = commentService.listByTargetId(id, CommentTypeEnum.COMMENT);
+        return ResultDTO.okOf(commentDTOS);
     }
 }
