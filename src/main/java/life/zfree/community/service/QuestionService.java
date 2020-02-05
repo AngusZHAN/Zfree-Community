@@ -57,9 +57,9 @@ public class QuestionService {
         //size*(page-1)
         Integer offset = size * (page - 1);
         QuestionExample questionExample = new QuestionExample();
-        questionExample.createCriteria().
-                questionExample.setOrderByClause("gmt_create desc");
-        List<Question> questions = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds(offset, size));
+        questionExample.setOrderByClause("gmt_create desc");
+        List<Question> questions = questionMapper
+                .selectByExampleWithRowbounds(questionExample, new RowBounds(offset, size));
         List<QuestionDTO> questionDTOList = new ArrayList<>();
 
         for (Question question : questions) {
@@ -176,6 +176,6 @@ public class QuestionService {
             BeanUtils.copyProperties(q, questionDTO);
             return questionDTO;
         }).collect(Collectors.toList());
-        return null;
+        return questionDTOS;
     }
 }
