@@ -1,19 +1,12 @@
 package life.zfree.community.controller;
 
 import life.zfree.community.dto.PaginationDTO;
-import life.zfree.community.dto.QuestionDTO;
-import life.zfree.community.mapper.UserMapper;
-import life.zfree.community.model.User;
 import life.zfree.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @Controller
 public class IndexController {
