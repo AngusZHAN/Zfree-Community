@@ -1,5 +1,6 @@
 package life.zfree.community.mapper;
 
+import life.zfree.community.dto.QuestionQueryDTO;
 import life.zfree.community.model.Question;
 
 import java.util.List;
@@ -10,4 +11,8 @@ public interface QuestionExtMapper {
     int incCommentCount(Question record);
 
     List<Question> selectRelated(Question question);
+
+    Integer countBySearch(QuestionQueryDTO questionQueryDTO);
+
+    List<Question> selectBySearch(QuestionQueryDTO questionQueryDTO);
 }
